@@ -1,0 +1,31 @@
+I have added to code below to display a privacy policy on the single product page but It should be terms and conditions to be accepted.
+Another problem comes when I add Google Pay and Apple Pay to a site. Of course, it's not working because it's not configured.
+
+how do I make it to validate also google and apple pay?
+
+I would appreciate help, because I am beginner with these code snippets.
+
+
+add_action( 'woocommerce_before_add_to_cart_button', 'add_privacy_policy', 9 );
+
+function add_privacy_policy() {
+
+    woocommerce_form_field( 'privacy_policy', array(
+    'type'          => 'checkbox',
+    'class'         => array('form-row privacy'),
+    'label_class'   => array('woocommerce-form__label woocommerce-form__label-for-checkbox checkbox'),
+    'input_class'   => array('woocommerce-form__input woocommerce-form__input-checkbox input-checkbox'),
+    'required'      => true,
+    'label'         => 'I\'ve read and accept the <a href="#">Privacy Policy</a>',
+    )); 
+
+    }
+
+function add_privacy_policy_validation( $passed ) { 
+    if ( !isset( $_REQUEST['privacy_policy'] ) ) {
+        wc_add_notice( __( 'Please accept privacy policy', 'woocommerce' ), 'error' );
+        $passed = false;
+    }
+    return $passed;
+}
+add_filter( 'woocommerce_add_to_cart_validation', 'add_privacy_policy_validation', 99 );
